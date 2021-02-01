@@ -33,7 +33,7 @@
           <td>SW-{{ data_terminal.switch_label }}</td>
           <td>Ping Lost</td>
           <td>{{ data_terminal.time_stamp|date:'d-m-Y g:i:s A'}}</td>
-          <td></td>
+          <td>{{ data_terminal.email_time_stamp|date:'d-m-Y g:i:s A'}}</td>
         </tr>
         {% endfor %}
       </tbody>

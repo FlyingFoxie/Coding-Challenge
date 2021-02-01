@@ -11,6 +11,7 @@ from .models import *
 
 local_tz = pytz.timezone("Asia/Singapore") 
 
+#bulk upload save
 @receiver(post_save, sender=Data_Terminal_BulkUpload)
 def create_bulk_data(sender, created, instance, *args, **kwargs):
 	if created:
@@ -31,6 +32,7 @@ def create_bulk_data(sender, created, instance, *args, **kwargs):
 			else:
 				switch_status = 1
 
+			#check if there's duplicate data
 			check = Data_Terminal.objects.filter(switch_label=switch_label,time_stamp=time_stamp).exists()
 			if not check:
 				data.append(
@@ -54,3 +56,4 @@ def _delete_file(path):
    """ Deletes file from filesystem. """
    if os.path.isfile(path):
        os.remove(path)
+

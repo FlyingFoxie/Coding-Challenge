@@ -4,7 +4,11 @@ from django.http import HttpResponse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView
 from .models import *
+from .serializers import Data_TerminalSerializer
+from rest_framework import generics
+from rest_framework import permissions
 import datetime
+
 
 def index(request):
 	s1_labels = []
@@ -41,8 +45,7 @@ def index(request):
 	return render(request, 'monitor/index.html', context)
 
 def data_terminal_list(request):
-	#data_terminals = Data_Terminal.objects.filter(t1_status=0,t2_status=0,t3_status=0,t4_status=0,t5_status=0)
-	data_terminals = Data_Terminal.objects.filter(switch_status=0)
+	data_terminals = Data_Terminal.objects.filter(switch_status=0).order_by('-time_stamp')
 	context={
 		"data_terminals":data_terminals,
 	}
@@ -54,3 +57,8 @@ class upload(SuccessMessageMixin, CreateView):
     fields = ['csv_file']
     success_url = reverse_lazy('list')
     success_message = 'Successfully uploaded Data'
+
+class data_terminal_api_list(generics.ListCreateAPIView):
+    queryset = Data_Terminal.objects.all()
+    serializer_class = Data_TerminalSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

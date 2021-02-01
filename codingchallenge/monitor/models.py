@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.core.mail import send_mail
+from datetime import datetime
 
 class Data_Terminal(models.Model):
 	SWITCH = [
@@ -19,6 +21,7 @@ class Data_Terminal(models.Model):
 	t4_status = models.IntegerField(choices=STATUS)
 	t5_status = models.IntegerField(choices=STATUS)
 	time_stamp = models.DateTimeField(default=timezone.now)
+	email_time_stamp = models.DateTimeField(blank=True, null=True)
 	switch_status = models.IntegerField(choices=STATUS)
 
 	@property
@@ -31,7 +34,18 @@ class Data_Terminal(models.Model):
 
 	def save(self,*args,**kwargs):
 		self.switch_status = self.get_switch_status
+		if self.switch_status == 0:
+			print("Notification")
+			send_mail(
+				'NOTIFICATION FROM DJANGO MONITOR',
+				'Please note that there is a disconnection for {} at time {}.'.format(self.switch_label,self.time_stamp),
+				'DJANGO BACKEND',
+				['williamcwc89@gmail.com'],
+				fail_silently = False,
+				)
+			self.email_time_stamp = timezone.now()
 		super(Data_Terminal, self).save(*args, **kwargs)
+
 
 	def __str__(self):
 		return self.switch_label + "_" + str(self.time_stamp)
