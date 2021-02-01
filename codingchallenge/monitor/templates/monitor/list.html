@@ -1,0 +1,48 @@
+{% extends 'monitor/base.html' %}
+{% block content %}
+
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Alert Report</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+			<a class="btn btn-primary" href="{% url 'upload' %}"><i
+			    class="fas fa-upload"></i> Upload CSV</a>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+
+  <div class="table-responsive">
+    <table id="example1" class="table table-bordered table-hover" data-page-length='100'>
+      <thead class="thead-light">
+        <tr>
+          <th>No</th>
+          <th>Switch</th>
+          <th>Alert Type</th>
+          <th>Alert Date/Time</th>
+          <th>Email Notification Date/Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for data_terminal in data_terminals %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>SW-{{ data_terminal.switch_label }}</td>
+          <td>Ping Lost</td>
+          <td>{{ data_terminal.time_stamp|date:'d-m-Y g:i:s A'}}</td>
+          <td></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+  </div><!-- /.container-fluid -->
+</div>
+
+{% endblock content %}
